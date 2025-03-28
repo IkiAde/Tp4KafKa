@@ -1,0 +1,124 @@
+
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <!-- Importer la police Lexend depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importer Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #E2E7E0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        
+        h1 {
+            color: #335959;
+            margin-top: 10px; /* Ajouter une marge en haut */
+            margin-bottom: 50px; /* Augmenter la marge en bas */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 30px;
+            align-self: center; /* Aligner le titre à gauche */
+        }
+
+        h3 {
+            color: #335959;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 18px;
+        }
+
+        table {
+            width: 80%; /* Largeur du tableau */
+            border-collapse: collapse; /* Fusionner les bordures */
+            margin-bottom: 30px; /* Espace en bas du tableau */
+            background-color: white; /* Fond blanc pour le tableau */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+        }
+
+        th, td {
+            padding: 12px; /* Espacement interne des cellules */
+            text-align: center; /* Centrer le texte */
+            border: 1px solid #ddd; /* Bordures légères */
+        }
+
+        th {
+            background-color: #335959; /* Fond sombre pour l'en-tête */
+            color: white; /* Texte blanc pour l'en-tête */
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #335959; /* Texte sombre pour les cellules */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #335959;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            margin: 10px; /* Espace entre les boutons */
+        }
+
+        button:hover {
+            background-color: #2a4a4a;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centrer les boutons */
+            gap: 10px; /* Espace entre les boutons */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Facture pour la commande: <span th:text="${commande.titre}"></span></h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Quantité</th>
+            <th>Prix Unitaire (€)</th>
+            <th>Total (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="article : ${articles}">
+            <td th:text="${article.libelle}"></td>
+            <td th:text="${article.quantite}"></td>
+            <td th:text="${article.prixUnitaire}"></td>
+            <td th:text="${article.quantite * article.prixUnitaire}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Total de la commande : <span th:text="${#aggregates.sum(articles.![quantite * prixUnitaire])}"></span> €</h3>
+
+<div class="button-container">
+    <button onclick="window.print()">Imprimer la facture</button>
+    <a th:href="@{/store/viewCommande(idCommande=${commande.idCommande})}">
+        <button>Retour à la commande</button>
+    </a>
+</div>
+
+</body>
+</html>

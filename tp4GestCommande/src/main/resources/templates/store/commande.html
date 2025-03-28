@@ -1,0 +1,193 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <!-- Importer la police Lexend depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importer Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #E2E7E0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        
+        h2 {
+            color: #335959;
+            margin-top: 40px; /* Ajouter une marge en haut */
+            margin-bottom: 30px; /* Augmenter la marge en bas */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 30px;
+            align-self: center; /* Aligner le titre à gauche */
+        }
+
+        h3 {
+            color: #335959;
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 18px;
+        }
+
+        hr {
+            width: 100%; /* Ligne pleine largeur */
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 20px 0; /* Espace autour de la ligne */
+        }
+
+        ul {
+            list-style-type: disc; /* Ajouter des points devant chaque élément */
+            list-style-position: inside; /* Aligner les points avec le texte centré */
+            padding-left: 0; /* Supprimer le padding par défaut */
+            width: 100%; /* Prendre toute la largeur */
+            text-align: center; /* Centrer le texte */
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #335959;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px; /* Taille de police plus grande pour les liens */
+        }
+
+        ul li a:hover {
+            color: #2a4a4a;
+            text-decoration: underline; /* Souligner au survol */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #335959;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2a4a4a;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Lexend', sans-serif;
+            transition: border-color 0.3s ease;
+            width: 200px; /* Largeur fixe pour le champ de texte */
+        }
+
+        input:focus {
+            border-color: #335959;
+            outline: none;
+        }
+
+        .error-message {
+            color: #dc3545; /* Rouge pour les erreurs */
+            font-weight: bold;
+            margin: 8px 0;
+            text-align: center; /* Centrer les messages */
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: #28a745; /* Vert pour les succès */
+            font-weight: bold;
+            margin: 8px 0;
+            text-align: center; /* Centrer les messages */
+            font-size: 14px;
+        }
+
+        .add-article-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrer les éléments */
+            gap: 10px; /* Espace entre les éléments */
+            width: 100%; /* Prendre toute la largeur */
+        }
+
+        .add-article-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrer les éléments du formulaire */
+            gap: 10px; /* Espace entre les éléments */
+        }
+
+        .add-article-container input {
+            margin-bottom: 10px; /* Espace entre les champs */
+        }
+    </style>
+</head>
+<body>
+
+<h2>Commande: <span th:text="${commande.titre}"></span></h2>
+
+<hr>
+<a th:href="@{/store/printCommande(idCommande=${commande.idCommande})}">
+    <button>Voir la facture</button>
+</a>
+
+<hr>
+<h3>Articles de la commande</h3>
+<ul>
+    <li th:each="article : ${commande.articles}">
+        <span th:text="${article.libelle}"></span> - 
+        <span th:text="${article.quantite}"></span> unités - 
+        <span th:text="${article.prixUnitaire}"></span>€  
+        <form action="/store/deleteArticle" method="post" style="display:inline;">
+            <input type="hidden" name="idCommande" th:value="${commande.idCommande}" />
+            <input type="hidden" name="idArticle" th:value="${article.idArticle}" />
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+</ul>
+
+<hr>
+<h3>Ajouter un article</h3>
+<p th:if="${error4}" class="error-message"><span th:text="${error4}"></span></p>
+<p th:if="${success4}" class="success-message"><span th:text="${success4}"></span></p>
+<div class="add-article-container">
+    <form action="/store/addArticle" method="post">
+        <input type="hidden" name="idCommande" th:value="${commande.idCommande}" />
+        <input type="text" name="libelle" placeholder="Libellé" required /> <br/>
+        <input type="number" name="quantite" placeholder="Quantité" min="1" required /> <br/>
+        <input type="number" step="0.1" name="prix" placeholder="Prix" min="0.1" required /> <br/>
+        <button type="submit">Ajouter</button>
+    </form>
+</div>
+
+
+<hr>
+<h3>Envoyer la commande</h3>
+<form action="/store/sendCommande" method="post">
+	<input type="hidden" name="idCommande" th:value="${commande.idCommande}" />
+    <button type="submit">Envoyer</button>
+</form>
+
+<hr>
+<form th:action="@{/store/liste}" method="get">
+    <button type="submit">Retour à la liste des commandes</button>
+</form>
+
+</body>
+</html>

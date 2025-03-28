@@ -1,0 +1,189 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <!-- Importer la police Lexend depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importer Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #E2E7E0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        
+        h1 {
+            color: #335959;
+            margin-top: 40px; /* Ajouter une marge en haut */
+            margin-bottom: 50px; /* Augmenter la marge en bas */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 40px;
+            align-self: center; /* Aligner le titre à gauche */
+        }
+
+       h3 {
+            color: #335959;
+            margin-bottom: 0px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 18px;
+        }
+
+        hr {
+            width: 100%; /* Ligne pleine largeur */
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 46px 0;
+        }
+
+        ul {
+            list-style-type: disc; /* Ajouter des points devant chaque élément */
+            list-style-position: inside; /* Aligner les points avec le texte centré */
+            padding-left: 0; /* Supprimer le padding par défaut */
+            width: 100%; /* Prendre toute la largeur */
+            text-align: center; /* Centrer le texte */
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #335959;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px; /* Taille de police plus grande pour les liens */
+        }
+
+        ul li a:hover {
+            color: #2a4a4a;
+            text-decoration: underline; /* Souligner au survol */
+        }
+
+        .add-commande-container {
+            display: flex;
+            align-items: center; /* Aligner le texte et le champ sur la même ligne */
+            gap: 10px; /* Espace entre le texte et le champ */
+            margin-bottom: 20px;
+        }
+
+        .add-commande-container input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Lexend', sans-serif;
+            transition: border-color 0.3s ease;
+            width: 200px; /* Largeur fixe pour le champ de texte */
+        }
+
+        .add-commande-container input:focus {
+            border-color: #335959;
+            outline: none;
+        }
+
+        .add-commande-container button {
+            padding: 10px 20px;
+            background-color: #335959;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-commande-container button:hover {
+            background-color: #2a4a4a;
+        }
+
+        /* Styles pour les messages d'erreur */
+        .error-message {
+            color: #dc3545; /* Rouge pour les erreurs */
+            font-weight: bold;
+            margin: 8px 0;
+            text-align: center; /* Centrer les messages */
+            font-size: 14px;
+        }
+
+        /* Styles pour les messages de succès */
+        .success-message {
+            color: #28a745; /* Vert pour les succès */
+            font-weight: bold;
+            margin: 8px 0;
+            text-align: center; /* Centrer les messages */
+            font-size: 14px;
+        }
+
+        /* Bouton de déconnexion sans bloc blanc */
+        .logout-button {
+            margin-top: 20px;
+        }
+
+        .logout-button button {
+            padding: 10px 20px;
+            background-color: #335959;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button button:hover {
+            background-color: #2a4a4a;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bienvenue <span th:text="${session.prenomClient}">Utilisateur</span> !</h1>
+
+<hr>
+
+<h3>Liste des commandes</h3>
+<br>
+<ul>
+    <li th:each="commande : ${commandes}">
+        <a th:href="@{/store/viewCommande(idCommande=${commande.idCommande})}" th:text="${commande.titre}"></a>
+    </li>
+</ul>
+
+<hr>
+
+<h3>Ajouter une commande</h3>
+<p th:if="${error3}" class="error-message"><span th:text="${error3}"></span><p/>
+<p th:if="${success3}" class="success-message"><span th:text="${success3}"></span><p/>
+<div class="add-commande-container">
+    <form action="/store/addCommande" method="post">
+        <input type="text" name="titre" placeholder="Titre de la commande" />
+        <button type="submit">Ajouter</button>
+    </form>
+</div>
+
+<hr>
+
+<!-- Bouton de déconnexion sans bloc blanc -->
+<div class="logout-button">
+    <form action="/store/logout" method="post">
+        <button type="submit">Se déconnecter</button>
+    </form>
+</div>
+
+</body>
+</html>
