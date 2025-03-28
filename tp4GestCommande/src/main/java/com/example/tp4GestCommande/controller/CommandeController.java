@@ -43,8 +43,7 @@ public class CommandeController {
 			Commande commande= optCommande.get();
 			
 			
-			commande.getArticles();
-	        String commandeJson = convertCommandeToJson(commande.getArticles());
+	        String commandeJson = convertCommandeToJson(commande);
 	        
 	        kafkaProducer.produce(commandeJson);
 	        
@@ -58,14 +57,18 @@ public class CommandeController {
 	    }
 	}
 
+
 	
-	private String convertCommandeToJson(List<Article> list) {
-		for(var prd : list) {
-			System.out.println("LA LISTE"+prd);
-		}
+	private String convertCommandeToJson(Commande commande) {
 	    ObjectMapper objectMapper = new ObjectMapper();
-	    return "gfhgf";
-		//return objectMapper.writeValueAsString(list);
+	    try {
+	    	
+	    	System.out.println("AFFICHAGE "+objectMapper.writeValueAsString(commande));
+	        return objectMapper.writeValueAsString(commande);
+	        
+	    } catch (JsonProcessingException e) {
+	        throw new RuntimeException("Erreur de conversion JSON", e);
+	    }
 	}
 
 

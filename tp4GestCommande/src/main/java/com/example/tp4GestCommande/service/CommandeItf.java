@@ -12,6 +12,8 @@ public interface CommandeItf {
 	  public List<Commande> getCommandesParClient(String emailClient);
 	  
 	  public Optional<Commande> findCommandeById(Long id);
+	  
+	  //public void sendCommande(Long Id);
 	}
 
 

@@ -3,6 +3,9 @@ package com.example.tp4GestCommande.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -56,6 +59,7 @@ public class Commande {
 
 
 	@OneToMany(mappedBy="commande", cascade= CascadeType.ALL)
+	@JsonManagedReference
 	private List<Article> articles= new ArrayList<>();
 
 }

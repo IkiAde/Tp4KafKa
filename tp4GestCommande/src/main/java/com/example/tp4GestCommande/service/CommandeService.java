@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.tp4GestCommande.entity.Article;
 import com.example.tp4GestCommande.entity.Client;
 import com.example.tp4GestCommande.entity.Commande;
+import com.example.tp4GestCommande.repository.ArticleRepository;
 import com.example.tp4GestCommande.repository.ClientRepository;
 import com.example.tp4GestCommande.repository.CommandeRepository;;
 
@@ -21,6 +23,11 @@ public class CommandeService implements CommandeItf {
 	@Autowired
 	private CommandeRepository commandeRepo;
 
+	@Autowired
+	private ArticleRepository articleRepo;
+	
+	@Autowired
+	private KafkaProducer kafkaProducer;
 
 	@Override
 	public List<Commande> getCommandesParClient(String emailClient) {
@@ -59,6 +66,7 @@ public class CommandeService implements CommandeItf {
 		
 		return commandeRepo.findById(id);
 	}
+
 
 	
 	

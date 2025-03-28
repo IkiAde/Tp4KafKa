@@ -2,6 +2,8 @@ package com.example.tp4GestCommande.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -65,6 +67,7 @@ public class Article {
 	
 	@ManyToOne
 	(cascade=CascadeType.PERSIST)
+	@JsonBackReference
 	Commande commande;
 	
 	
